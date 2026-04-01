@@ -10,8 +10,8 @@ on:
 
 # CRITICAL: Grant permissions for Release Please to work
 permissions:
-  contents: write        # Create releases and tags
-  pull-requests: write   # Create/update release PRs
+  contents: write # Create releases and tags
+  pull-requests: write # Create/update release PRs
 
 jobs:
   release-please:
@@ -22,7 +22,7 @@ jobs:
       tag_name: ${{ steps.release.outputs.tag_name }}
       version: ${{ steps.release.outputs.version }}
       upload_url: ${{ steps.release.outputs.upload_url }}
-    
+
     steps:
       - name: Run Release Please
         id: release
@@ -37,44 +37,39 @@ jobs:
     needs: release-please
     if: ${{ needs.release-please.outputs.release_created }}
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'pnpm'
-      
+          node-version: "20"
+          cache: "npm"
+
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-      
+        run: npm ci
+
       - name: Run linting
-        run: pnpm run lint
-      
+        run: npm run lint
+
       - name: Run tests
-        run: pnpm run test
-      
+        run: npm run test
+
       - name: Run E2E tests
-        run: pnpm run e2e
-      
+        run: npm run e2e
+
       - name: Build project
-        run: pnpm run build
-      
+        run: npm run build
+
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: dist-${{ needs.release-please.outputs.version }}
           path: dist/
           retention-days: 30
-      
+
       # OPTIONAL: Deploy to your hosting service
       # Uncomment and configure based on your deployment target
       # - name: Deploy to Production
@@ -82,10 +77,9 @@ jobs:
       #     echo "Deploy to your hosting service here"
       #     # Examples:
       #     # - Vercel: npx vercel --prod --token=${{ secrets.VERCEL_TOKEN }}
-      
+
       - name: Create release notes
         run: |
           echo "🚀 **Version ${{ needs.release-please.outputs.version }} Released!**" >> release_notes.md
           echo "" >> release_notes.md
           echo "📦 Build artifacts are available below." >> release_notes.md
-

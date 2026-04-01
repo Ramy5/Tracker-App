@@ -29,39 +29,13 @@ printf "${BLUE}===============================${NC}\n"
 # 2. Run Build
 # ------------------------------------
 printf "${YELLOW}📝 Running Build...${NC}\n"
-pnpm run build
+npm run build
 EXIT_CODE=$?
 if [ $EXIT_CODE -ne 0 ]; then
   printf "${RED}❌🏗️ Build failed! Please fix build/type errors before committing.${NC}\n"
   exit $EXIT_CODE
 fi
 printf "${GREEN}✅🏗️ Build passed!${NC}\n"
-printf "${BLUE}===============================${NC}\n"
-
-# ------------------------------------
-# 3. Run Tests
-# ------------------------------------
-printf "${YELLOW}🧪 Running Tests...${NC}\n"
-npm run test -- --run --passWithNoTests
-EXIT_CODE=$?
-if [ $EXIT_CODE -ne 0 ]; then
-  printf "${RED}❌🧪 Tests failed! Please fix all failing tests before committing.${NC}\n"
-  exit $EXIT_CODE
-fi
-printf "${GREEN}✅🧪 All tests passed!${NC}\n"
-printf "${BLUE}===============================${NC}\n"
-
-# ------------------------------------
-# 4. Run Playwright E2E Tests
-# ------------------------------------
-printf "${YELLOW}🎭 Running Playwright E2E Tests...${NC}\n"
-npx playwright test
-EXIT_CODE=$?
-if [ $EXIT_CODE -ne 0 ]; then
-  printf "${RED}❌🎭 Playwright E2E Tests failed! Please fix all failing tests before committing.${NC}\n"
-  exit $EXIT_CODE
-fi
-printf "${GREEN}✅🎭 All Playwright tests passed!${NC}\n"
 printf "${BLUE}===============================${NC}\n"
 
 # ------------------------------------

@@ -14,28 +14,22 @@ jobs:
         with:
           fetch-depth: 0
 
-      # 1. Install pnpm first
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: latest
-
-      # 2. Setup node with pnpm cache
+      # 1. Setup node
       - name: Setup node
         uses: actions/setup-node@v4
         with:
           node-version: lts/*
-          cache: pnpm
+          cache: npm
 
-      # 3. Install commitlint
-      - name: Install commitlint
-        run: pnpm add -D @commitlint/cli @commitlint/config-conventional
+      # 2. Install dependencies (includes commitlint from devDependencies)
+      - name: Install dependencies
+        run: npm ci
 
       - name: Print versions
         run: |
           echo "git: $(git --version)"
           echo "node: $(node --version)"
-          echo "pnpm: $(pnpm --version)"
+          echo "npm: $(npm --version)"
           echo "commitlint: $(npx commitlint --version)"
 
       - name: Validate current commit (last commit) with commitlint
