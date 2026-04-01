@@ -1,0 +1,18 @@
+import "@/global.css";
+import { styled } from "nativewind";
+import { Text, View } from "react-native";
+import { SafeAreaView as RN_SafeAreaView } from "react-native-safe-area-context";
+
+const SafeAreaView = styled(RN_SafeAreaView);
+
+export default function App() {
+  return (
+    <SafeAreaView className="flex-1 p-5 bg-background">
+      <View className="">
+        <Text className="text-xl font-bold text-blue-500">
+          Welcome to Nativewind!
+        </Text>
+      </View>
+    </SafeAreaView>
+  );
+}
