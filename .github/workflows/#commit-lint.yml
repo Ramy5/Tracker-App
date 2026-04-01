@@ -1,0 +1,47 @@
+#commit-lint.yml
+name: Commit Lint
+
+on: [push, pull_request]
+
+permissions:
+  contents: read
+
+jobs:
+  commitlint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # 1. Install pnpm first
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: latest
+
+      # 2. Setup node with pnpm cache
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: pnpm
+
+      # 3. Install commitlint
+      - name: Install commitlint
+        run: pnpm add -D @commitlint/cli @commitlint/config-conventional
+
+      - name: Print versions
+        run: |
+          echo "git: $(git --version)"
+          echo "node: $(node --version)"
+          echo "pnpm: $(pnpm --version)"
+          echo "commitlint: $(npx commitlint --version)"
+
+      - name: Validate current commit (last commit) with commitlint
+        if: github.event_name == 'push'
+        run: npx commitlint --last --verbose
+
+      - name: Validate PR commits with commitlint
+        if: github.event_name == 'pull_request'
+        run: npx commitlint --from ${{ github.event.pull_request.base.sha }} --to ${{ github.event.pull_request.head.sha }} --verbose
