@@ -23,7 +23,7 @@ export const UPCOMING_SUBSCRIPTIONS: UpcomingSubscription[] = [
     name: "Spotify",
     price: 5.99,
     currency: "USD",
-    daysLeft: 2,
+    renewalDate: "2026-04-03T09:00:00.000Z",
   },
   {
     id: "notion",
@@ -31,7 +31,7 @@ export const UPCOMING_SUBSCRIPTIONS: UpcomingSubscription[] = [
     name: "Notion",
     price: 12.0,
     currency: "USD",
-    daysLeft: 4,
+    renewalDate: "2026-04-05T09:00:00.000Z",
   },
   {
     id: "figma",
@@ -39,7 +39,7 @@ export const UPCOMING_SUBSCRIPTIONS: UpcomingSubscription[] = [
     name: "Figma",
     price: 15.0,
     currency: "USD",
-    daysLeft: 6,
+    renewalDate: "2026-04-07T09:00:00.000Z",
   },
 ];
 
@@ -105,3 +105,16 @@ export const HOME_SUBSCRIPTIONS: Subscription[] = [
     color: "#b8e8d0",
   },
 ];
+
+/**
+ * Computes days left until a renewal date from the current date
+ * @param renewalDate ISO 8601 date string
+ * @returns Number of days until renewal (can be negative if past due)
+ */
+export function computeDaysLeft(renewalDate: string): number {
+  const now = new Date();
+  const renewal = new Date(renewalDate);
+  const diffTime = renewal.getTime() - now.getTime();
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  return diffDays;
+}

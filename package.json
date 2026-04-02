@@ -11,7 +11,7 @@
     "web": "expo start --web",
     "lint": "expo lint",
     "build": "tsc --noEmit",
-    "test": "expo start --tunnel"
+    "test": "npm run lint && npm run build"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",

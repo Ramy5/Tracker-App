@@ -41,7 +41,7 @@ declare global {
     name: string;
     price: number;
     currency?: string;
-    daysLeft: number;
+    renewalDate: string;
   }
 
   interface UpcomingSubscriptionCardProps extends Omit<
@@ -53,3 +53,5 @@ declare global {
     title: string;
   }
 }
+
+export {};
