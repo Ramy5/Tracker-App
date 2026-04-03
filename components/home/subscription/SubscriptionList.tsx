@@ -1,6 +1,6 @@
 import GlobalHeader from "@/components/ui/GlobalHeader";
 import { HOME_SUBSCRIPTIONS } from "@/constants/data";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { FlatList, Text, View } from "react-native";
 import Balance from "../balance/Balance";
 import Header from "../header/Header";
@@ -10,22 +10,27 @@ import SubscriptionItem from "./SubscriptionItem";
 const SubscriptionList = () => {
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
+  const ListHeader = useMemo(
+    () => (
+      <View className="gap-5">
+        {/* HEADER */}
+        <Header />
+
+        {/* BALANCE */}
+        <Balance />
+
+        {/* UPCOMING */}
+        <Upcoming />
+
+        <GlobalHeader title="All Subscriptions" />
+      </View>
+    ),
+    [],
+  );
+
   return (
     <FlatList
-      ListHeaderComponent={() => (
-        <View className="gap-5">
-          {/* HEADER */}
-          <Header />
-
-          {/* BALANCE */}
-          <Balance />
-
-          {/* UPCOMING */}
-          <Upcoming />
-
-          <GlobalHeader title="All Subscriptions" />
-        </View>
-      )}
+      ListHeaderComponent={ListHeader}
       data={HOME_SUBSCRIPTIONS}
       renderItem={({ item }) => (
         <SubscriptionItem

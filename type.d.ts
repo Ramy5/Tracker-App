@@ -19,7 +19,7 @@ declare global {
     plan?: string;
     category?: string;
     paymentMethod?: string;
-    status?: string;
+    status?: TSubscriptionStatus;
     startDate?: string;
     price: number;
     currency?: string;
