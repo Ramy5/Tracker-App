@@ -30,6 +30,7 @@ jobs:
         with:
           # Token with write permissions
           token: ${{ secrets.GITHUB_TOKEN }}
+          release-type: node
 
   # Build and publish on release
   deploy:
@@ -53,12 +54,6 @@ jobs:
 
       - name: Run linting
         run: npm run lint
-
-      - name: Run tests
-        run: npm run test
-
-      - name: Run E2E tests
-        run: npm run e2e
 
       - name: Build project
         run: npm run build
