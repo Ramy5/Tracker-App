@@ -19,6 +19,11 @@ const UpcomingItem = ({
   const daysLeft = computeDaysLeft(renewalDate);
 
   const getDaysLeftText = () => {
+    if (daysLeft < 0) {
+      const overdue = Math.abs(daysLeft);
+      return overdue === 1 ? "1 day overdue" : `${overdue} days overdue`;
+    }
+
     if (daysLeft === 0) return "Due today";
     if (daysLeft === 1) return "1 day left";
     return `${daysLeft} days left`;

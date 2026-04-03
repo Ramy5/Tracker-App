@@ -1,5 +1,7 @@
 import type { ImageSourcePropType } from "react-native";
 
+export type TSubscriptionStatus = "active" | "paused" | "cancelled";
+
 export interface SubscriptionItemProps {
   id: string;
   icon: ImageSourcePropType;
@@ -15,7 +17,7 @@ export interface SubscriptionItemProps {
   expanded: boolean;
   paymentMethod?: string;
   startDate?: string;
-  status?: string;
+  status?: TSubscriptionStatus;
 }
 
 export interface DetailRowProps {

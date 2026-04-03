@@ -49,9 +49,9 @@ const SubscriptionItem = ({
     <Pressable
       onPress={onPress}
       style={!expanded && color && { backgroundColor: color }}
-      className="flex-row items-center justify-between rounded-2xl p-4"
+      className="rounded-2xl p-4 gap-4"
     >
-      <View className="flex-row flex-1 items-center justify-between">
+      <View className="flex-row items-center justify-between">
         <View className="flex-row items-center gap-3">
           <View className="bg-white/30 rounded-xl p-3 w-14 h-14 items-center justify-center">
             <Image source={icon} className="w-9 h-9" resizeMode="contain" />
@@ -80,7 +80,7 @@ const SubscriptionItem = ({
       </View>
 
       {expanded && (
-        <View className="sub-body">
+        <View className="sub-body w-full">
           <View className="sub-details">
             {detailRows.map((row) => (
               <DetailRow key={row.label} label={row.label} value={row.value} />
