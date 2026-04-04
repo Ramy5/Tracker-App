@@ -1,5 +1,5 @@
 import AuthField from "@/components/auth/AuthField";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ActivityIndicator, Modal, Pressable, Text, View } from "react-native";
 
 type EditProfileModalProps = {
@@ -21,6 +21,14 @@ const EditProfileModal = ({
   const [lastName, setLastName] = useState(initialLastName);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | undefined>();
+
+  useEffect(() => {
+    if (visible) {
+      setFirstName(initialFirstName);
+      setLastName(initialLastName);
+      setError(undefined);
+    }
+  }, [visible, initialFirstName, initialLastName]);
 
   const hasChanged =
     firstName.trim() !== initialFirstName ||

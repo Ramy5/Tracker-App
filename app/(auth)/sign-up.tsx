@@ -3,72 +3,66 @@ import AuthField from "@/components/auth/AuthField";
 import AuthScreen from "@/components/auth/AuthScreen";
 import VerificationView from "@/components/auth/VerificationView";
 import { useAuth, useSignUp } from "@clerk/expo";
-import { Href, Link, useRouter } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import { useState } from "react";
 import { ActivityIndicator, Pressable, Text, View } from "react-native";
+import { navigateHome } from "./sign-in";
 
 export default function SignUpPage() {
   const { signUp, errors, fetchStatus } = useSignUp();
   const { isSignedIn } = useAuth();
-  const router = useRouter();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [code, setCode] = useState("");
 
   const loading = fetchStatus === "fetching";
+  const router = useRouter();
 
   const handleSignUp = async () => {
-    const { error } = await signUp.password({ emailAddress: email, password });
-
-    if (error) {
-      console.error(JSON.stringify(error, null, 2));
-      return;
-    }
-
-    if (signUp.status === "complete") {
-      await signUp.finalize({
-        navigate: ({ session, decorateUrl }) => {
-          if (session?.currentTask) {
-            console.log(session?.currentTask);
-            return;
-          }
-
-          const url = decorateUrl("/");
-
-          if (url.startsWith("http")) {
-            window.location.href = url;
-          } else {
-            router.replace(url as Href);
-          }
-        },
+    try {
+      const { error } = await signUp.password({
+        emailAddress: email,
+        password,
       });
+
+      if (error) {
+        console.error(JSON.stringify(error, null, 2));
+        return;
+      }
+
+      if (signUp.status === "complete") {
+        await signUp.finalize({
+          navigate: navigateHome(router),
+        });
+
+        return;
+      }
+
+      if (
+        signUp.status === "missing_requirements" &&
+        signUp.unverifiedFields?.includes("email_address")
+      ) {
+        await signUp.verifications.sendEmailCode();
+      }
+    } catch (error) {
+      console.error(JSON.stringify(error, null, 2));
     }
-    await signUp.verifications.sendEmailCode();
   };
 
   const handleVerify = async () => {
-    await signUp.verifications.verifyEmailCode({ code });
+    try {
+      await signUp.verifications.verifyEmailCode({ code });
 
-    if (signUp.status === "complete") {
-      await signUp.finalize({
-        navigate: ({ session, decorateUrl }) => {
-          if (session?.currentTask) {
-            console.log(session?.currentTask);
-            return;
-          }
-
-          const url = decorateUrl("/");
-
-          if (url.startsWith("http")) {
-            window.location.href = url;
-          } else {
-            router.replace(url as Href);
-          }
-        },
-      });
-    } else {
-      console.error("Sign-up attempt not complete:", signUp);
+      if (signUp.status === "complete") {
+        await signUp.finalize({
+          navigate: navigateHome(router),
+        });
+      } else {
+        console.error("Sign-up attempt not complete:", signUp);
+      }
+    } catch (error) {
+      console.error(JSON.stringify(error, null, 2));
     }
   };
 

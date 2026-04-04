@@ -8,7 +8,7 @@ const UserInfo = () => {
     <View className="flex-row items-center gap-2">
       {user?.imageUrl ? (
         <Image
-          source={{ uri: user?.imageUrl }}
+          source={{ uri: user.imageUrl }}
           className="w-10 h-10 rounded-full"
           resizeMode="cover"
         />

@@ -75,6 +75,11 @@ const EditProfile = () => {
   };
 
   const handleSave = async () => {
+    if (!user) {
+      setError("User data is still loading. Please try again.");
+      return;
+    }
+
     if (!firstName.trim()) {
       setError("First name is required");
       return;
@@ -86,11 +91,11 @@ const EditProfile = () => {
     try {
       if (avatarBase64) {
         setUploadingImage(true);
-        await user?.setProfileImage({ file: avatarBase64 });
+        await user.setProfileImage({ file: avatarBase64 });
         setUploadingImage(false);
       }
 
-      await user?.update({
+      await user.update({
         firstName: firstName.trim(),
         lastName: lastName.trim(),
       });
@@ -99,6 +104,7 @@ const EditProfile = () => {
     } catch (e) {
       console.log(e);
       setError("Failed to update profile. Please try again.");
+      throw e;
     } finally {
       setSaving(false);
       setUploadingImage(false);
