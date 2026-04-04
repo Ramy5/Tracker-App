@@ -102,9 +102,8 @@ const EditProfile = () => {
 
       router.back();
     } catch (e) {
-      console.log(e);
+      console.error(e);
       setError("Failed to update profile. Please try again.");
-      throw e;
     } finally {
       setSaving(false);
       setUploadingImage(false);

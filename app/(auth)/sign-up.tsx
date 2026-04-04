@@ -66,6 +66,14 @@ export default function SignUpPage() {
     }
   };
 
+  const handleResend = async () => {
+    try {
+      await signUp.verifications.sendEmailCode();
+    } catch (err) {
+      console.error("Resend failed", err);
+    }
+  };
+
   if (signUp?.status === "complete" || isSignedIn) return null;
 
   if (
@@ -80,7 +88,7 @@ export default function SignUpPage() {
         code={code}
         onChangeCode={setCode}
         onVerify={handleVerify}
-        onResend={() => signUp.verifications.sendEmailCode()}
+        onResend={handleResend}
         error={errors?.fields?.code?.message}
         loading={loading}
       />

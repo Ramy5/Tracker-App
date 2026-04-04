@@ -5,13 +5,20 @@ import VerificationView from "@/components/auth/VerificationView";
 import { useSignIn } from "@clerk/expo";
 import { type Href, Link, useRouter } from "expo-router";
 import { useState } from "react";
-import { ActivityIndicator, Pressable, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  Platform,
+  Pressable,
+  Text,
+  View,
+} from "react-native";
 
 export const navigateHome =
   (router: ReturnType<typeof useRouter>) =>
   ({ decorateUrl }: { decorateUrl: (url: string) => string }) => {
     const url = decorateUrl("/");
-    if (url.startsWith("http")) {
+
+    if (url.startsWith("http") && Platform.OS === "web") {
       window.location.href = url;
     } else {
       router.replace(url as Href);
@@ -66,6 +73,14 @@ export default function SignInPage() {
     }
   };
 
+  const handleResend = async () => {
+    try {
+      await signIn.mfa.sendEmailCode();
+    } catch (err) {
+      console.error("Resend failed", err);
+    }
+  };
+
   if (signIn?.status === "needs_client_trust") {
     return (
       <VerificationView
@@ -74,7 +89,7 @@ export default function SignInPage() {
         code={code}
         onChangeCode={setCode}
         onVerify={handleVerify}
-        onResend={() => signIn.mfa.sendEmailCode()}
+        onResend={handleResend}
         error={errors?.fields?.code?.message}
         loading={loading}
       />
