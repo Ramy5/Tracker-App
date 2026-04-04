@@ -4,6 +4,7 @@ import * as ImagePicker from "expo-image-picker";
 import { useRouter } from "expo-router";
 import { styled } from "nativewind";
 import { useState } from "react";
+import { usePostHog } from "posthog-react-native";
 import {
   ActivityIndicator,
   Alert,
@@ -20,6 +21,7 @@ const SafeAreaView = styled(RN_SafeAreaView);
 const EditProfile = () => {
   const { user } = useUser();
   const router = useRouter();
+  const posthog = usePostHog();
 
   const [firstName, setFirstName] = useState(user?.firstName ?? "");
   const [lastName, setLastName] = useState(user?.lastName ?? "");
@@ -98,6 +100,13 @@ const EditProfile = () => {
       await user.update({
         firstName: firstName.trim(),
         lastName: lastName.trim(),
+      });
+
+      posthog.capture("profile_updated", {
+        updated_name:
+          firstName.trim() !== initialFirstName ||
+          lastName.trim() !== initialLastName,
+        updated_photo: !!avatarBase64,
       });
 
       router.back();

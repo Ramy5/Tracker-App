@@ -5,6 +5,7 @@ import VerificationView from "@/components/auth/VerificationView";
 import { useSignIn } from "@clerk/expo";
 import { type Href, Link, useRouter } from "expo-router";
 import { useState } from "react";
+import { usePostHog } from "posthog-react-native";
 import {
   ActivityIndicator,
   Platform,
@@ -27,6 +28,7 @@ export const navigateHome =
 
 export default function SignInPage() {
   const { signIn, errors, fetchStatus } = useSignIn();
+  const posthog = usePostHog();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -48,6 +50,8 @@ export default function SignInPage() {
       }
 
       if (signIn.status === "complete") {
+        posthog.identify(email, { $set: { email } });
+        posthog.capture("user_signed_in", { email });
         await signIn.finalize({ navigate: navigateHome(router) });
       } else if (signIn.status === "needs_client_trust") {
         const emailFactor = signIn.supportedSecondFactors?.find(
@@ -66,6 +70,8 @@ export default function SignInPage() {
       await signIn.mfa.verifyEmailCode({ code });
 
       if (signIn.status === "complete") {
+        posthog.identify(email, { $set: { email } });
+        posthog.capture("user_signed_in", { email, mfa: true });
         await signIn.finalize({ navigate: navigateHome(router) });
       }
     } catch (error) {
