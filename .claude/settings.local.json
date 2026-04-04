@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx expo:*)",
+      "Bash(npx tsc:*)",
+      "Bash(kill %1)",
+      "Bash(node -e \"const {useSignIn} = require\\('@clerk/expo'\\); console.log\\(typeof useSignIn\\)\")",
+      "Bash(ls /c/Users/ramys/OneDrive/Desktop/tracker_app/node_modules/@clerk/expo/dist/token-cache*)",
+      "Bash(ls /c/Users/ramys/OneDrive/Desktop/tracker_app/node_modules/@clerk/expo/token-cache*)",
+      "mcp__claude_ai_Context7__resolve-library-id",
+      "mcp__claude_ai_Context7__query-docs",
+      "Bash(xargs grep:*)"
+    ]
+  }
+}
