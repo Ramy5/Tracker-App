@@ -32,7 +32,7 @@ const SettingsRow = ({
 
     <View className="flex-row items-center gap-2">
       {loading ? (
-        <ActivityIndicator size="small" color="#ea7a53" />
+        <ActivityIndicator size="small" className="text-accent" />
       ) : value ? (
         <Text
           numberOfLines={1}

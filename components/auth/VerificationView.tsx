@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import { ActivityIndicator, Pressable, Text, View } from "react-native";
 import AuthBrand from "./AuthBrand";
 import AuthField from "./AuthField";
@@ -54,7 +55,11 @@ const VerificationView = ({
           )}
         </Pressable>
 
-        <Pressable className="auth-secondary-button" onPress={onResend}>
+        <Pressable
+          className={clsx("auth-secondary-button", loading && "opacity-60")}
+          onPress={onResend}
+          disabled={loading}
+        >
           <Text className="auth-secondary-button-text">Resend code</Text>
         </Pressable>
       </View>

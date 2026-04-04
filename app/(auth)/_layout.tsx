@@ -5,8 +5,7 @@ import { View } from "react-native";
 export default function AuthRoutesLayout() {
   const { isSignedIn, isLoaded } = useAuth();
 
-  if (!isLoaded)
-    return <View style={{ flex: 1, backgroundColor: "#fff9e3" }} />;
+  if (!isLoaded) return <View className="flex-1 bg-background" />;
   if (isSignedIn) return <Redirect href="/(tabs)" />;
 
   return <Stack screenOptions={{ headerShown: false }} />;

@@ -7,29 +7,10 @@ import { type Href, Link, useRouter } from "expo-router";
 import { useState } from "react";
 import { ActivityIndicator, Pressable, Text, View } from "react-native";
 
-type TNavigateHome = {
-  session: { currentTask?: unknown } | null;
-  decorateUrl: (url: string) => string;
-};
-
-export default function SignInPage() {
-  const { signIn, errors, fetchStatus } = useSignIn();
-  const router = useRouter();
-
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [code, setCode] = useState("");
-
-  const loading = fetchStatus === "fetching";
-
-  const navigateHome = ({ session, decorateUrl }: TNavigateHome) => {
-    if (session?.currentTask) {
-      console.log(session?.currentTask);
-      return;
-    }
-
+export const navigateHome =
+  (router: ReturnType<typeof useRouter>) =>
+  ({ decorateUrl }: { decorateUrl: (url: string) => string }) => {
     const url = decorateUrl("/");
-
     if (url.startsWith("http")) {
       window.location.href = url;
     } else {
@@ -37,30 +18,51 @@ export default function SignInPage() {
     }
   };
 
+export default function SignInPage() {
+  const { signIn, errors, fetchStatus } = useSignIn();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [code, setCode] = useState("");
+
+  const loading = fetchStatus === "fetching";
+  const router = useRouter();
+
   const handleSignIn = async () => {
-    const { error } = await signIn.password({ emailAddress: email, password });
+    try {
+      const { error } = await signIn.password({
+        emailAddress: email,
+        password,
+      });
 
-    if (error) {
+      if (error) {
+        console.error(JSON.stringify(error, null, 2));
+        return;
+      }
+
+      if (signIn.status === "complete") {
+        await signIn.finalize({ navigate: navigateHome(router) });
+      } else if (signIn.status === "needs_client_trust") {
+        const emailFactor = signIn.supportedSecondFactors?.find(
+          (f: { strategy: string }) => f.strategy === "email_code",
+        );
+
+        if (emailFactor) await signIn.mfa.sendEmailCode();
+      }
+    } catch (error) {
       console.error(JSON.stringify(error, null, 2));
-      return;
-    }
-
-    if (signIn.status === "complete") {
-      await signIn.finalize({ navigate: navigateHome });
-    } else if (signIn.status === "needs_client_trust") {
-      const emailFactor = signIn.supportedSecondFactors?.find(
-        (f: { strategy: string }) => f.strategy === "email_code",
-      );
-
-      if (emailFactor) await signIn.mfa.sendEmailCode();
     }
   };
 
   const handleVerify = async () => {
-    await signIn.mfa.verifyEmailCode({ code });
+    try {
+      await signIn.mfa.verifyEmailCode({ code });
 
-    if (signIn.status === "complete") {
-      await signIn.finalize({ navigate: navigateHome });
+      if (signIn.status === "complete") {
+        await signIn.finalize({ navigate: navigateHome(router) });
+      }
+    } catch (error) {
+      console.error(JSON.stringify(error, null, 2));
     }
   };
 

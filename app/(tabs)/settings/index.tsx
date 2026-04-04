@@ -39,6 +39,8 @@ const Settings = () => {
           try {
             await signOut();
             router.replace("/(auth)/sign-in");
+          } catch {
+            Alert.alert("Sign out failed", "Please try again.");
           } finally {
             setSigningOut(false);
           }
