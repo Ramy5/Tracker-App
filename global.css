@@ -273,7 +273,7 @@
     }
 
     .auth-subtitle {
-        @apply mt-2 max-w-[320px] text-center text-base font-sans-medium text-muted-foreground;
+        @apply mt-2 max-w-[320px] text-base font-sans-medium text-muted-foreground;
     }
 
     .auth-card {
@@ -293,7 +293,7 @@
     }
 
     .auth-input {
-        @apply rounded-2xl border border-border bg-background px-4 py-4 text-base font-sans-medium text-primary;
+        @apply rounded-xl border border-border bg-background px-4 py-4 text-base font-sans-medium text-primary;
     }
 
     .auth-input-error {

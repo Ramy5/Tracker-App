@@ -23,7 +23,7 @@ jobs:
 
       # 2. Install dependencies (includes commitlint from devDependencies)
       - name: Install dependencies
-        run: npm ci
+        run: npm install --legacy-peer-deps
 
       - name: Print versions
         run: |
