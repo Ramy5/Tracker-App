@@ -7,10 +7,12 @@ import { Link, useRouter } from "expo-router";
 import { useState } from "react";
 import { ActivityIndicator, Pressable, Text, View } from "react-native";
 import { navigateHome } from "./sign-in";
+import { usePostHog } from "posthog-react-native";
 
 export default function SignUpPage() {
   const { signUp, errors, fetchStatus } = useSignUp();
   const { isSignedIn } = useAuth();
+  const posthog = usePostHog();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -32,6 +34,11 @@ export default function SignUpPage() {
       }
 
       if (signUp.status === "complete") {
+        posthog.identify(email, {
+          $set: { email },
+          $set_once: { first_signup_date: new Date().toISOString() },
+        });
+        posthog.capture("user_signed_up", { email });
         await signUp.finalize({
           navigate: navigateHome(router),
         });
@@ -55,6 +62,11 @@ export default function SignUpPage() {
       await signUp.verifications.verifyEmailCode({ code });
 
       if (signUp.status === "complete") {
+        posthog.identify(email, {
+          $set: { email },
+          $set_once: { first_signup_date: new Date().toISOString() },
+        });
+        posthog.capture("user_signed_up", { email, email_verified: true });
         await signUp.finalize({
           navigate: navigateHome(router),
         });

@@ -6,6 +6,7 @@ import { useAuth, useUser } from "@clerk/expo";
 import { useRouter } from "expo-router";
 import { styled } from "nativewind";
 import { useState } from "react";
+import { usePostHog } from "posthog-react-native";
 import { Alert, ScrollView, Text, View } from "react-native";
 import { SafeAreaView as RN_SafeAreaView } from "react-native-safe-area-context";
 
@@ -15,6 +16,7 @@ const Settings = () => {
   const { signOut } = useAuth();
   const { user } = useUser();
   const router = useRouter();
+  const posthog = usePostHog();
   const [signingOut, setSigningOut] = useState(false);
 
   const firstName = user?.firstName ?? "";
@@ -37,6 +39,8 @@ const Settings = () => {
         onPress: async () => {
           setSigningOut(true);
           try {
+            posthog.capture("user_signed_out");
+            posthog.reset();
             await signOut();
             router.replace("/(auth)/sign-in");
           } catch {
