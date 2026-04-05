@@ -1,5 +1,7 @@
 import type { ImageSourcePropType } from "react-native";
 
+type TSubscriptionStatus = "active" | "paused" | "cancelled";
+
 declare global {
   interface AppTab {
     name: string;

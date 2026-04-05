@@ -47,7 +47,7 @@ const SubscriptionItem = ({
     { label: "Status:", value: status ? formatStatusLabel(status) : "—" },
   ];
 
-  const canDelete = status !== "cancelled";
+  const isCancelled = status === "cancelled";
 
   return (
     <Pressable
@@ -106,7 +106,7 @@ const SubscriptionItem = ({
               onPress={() => onDelete(id)}
             >
               <Text className="font-sans-bold text-destructive text-sm">
-                {canDelete ? "Remove" : "Delete"}
+                {isCancelled ? "Remove" : "Delete"}
               </Text>
             </Pressable>
           </View>

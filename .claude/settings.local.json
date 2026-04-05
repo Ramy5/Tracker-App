@@ -12,7 +12,7 @@
       "Bash(xargs grep:*)",
       "Bash(npm install:*)",
       "Bash(node -e \"const si = require\\('simple-icons'\\); console.log\\(Object.keys\\(si\\).slice\\(0,5\\)\\); const spotify = si.siSpotify; console.log\\(Object.keys\\(spotify\\)\\); console.log\\(spotify.slug, spotify.hex\\);\")",
-      "Bash(node -e ':*)"
+      "Bash(node -e ':*)",
       "Bash(npx eslint:*)",
       "Bash(node -e \"const d=require\\('fs'\\).readFileSync\\('/dev/stdin','utf8'\\); const r=JSON.parse\\(d\\); r[0]?.messages?.forEach\\(m=>console.log\\(m.ruleId, m.message\\)\\)\")"
     ]

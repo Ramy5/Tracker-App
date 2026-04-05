@@ -24,6 +24,16 @@ const Subscriptions = () => {
     );
   }, [query]);
 
+  const handleDelete = (id: string) => {
+    // TODO: Implement delete logic (remove from state/call API)
+    console.log("Deleting subscription:", id);
+
+    // Collapse the item if it's currently expanded
+    if (expandedId === id) {
+      setExpandedId(null);
+    }
+  };
+
   return (
     <SafeAreaView className="flex-1 bg-background">
       <FlatList
@@ -36,6 +46,7 @@ const Subscriptions = () => {
             onPress={() =>
               setExpandedId((prev) => (prev === item.id ? null : item.id))
             }
+            onDelete={handleDelete}
           />
         )}
         ListHeaderComponent={
