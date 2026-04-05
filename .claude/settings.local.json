@@ -9,7 +9,10 @@
       "Bash(ls /c/Users/ramys/OneDrive/Desktop/tracker_app/node_modules/@clerk/expo/token-cache*)",
       "mcp__claude_ai_Context7__resolve-library-id",
       "mcp__claude_ai_Context7__query-docs",
-      "Bash(xargs grep:*)"
+      "Bash(xargs grep:*)",
+      "Bash(npm install:*)",
+      "Bash(node -e \"const si = require\\('simple-icons'\\); console.log\\(Object.keys\\(si\\).slice\\(0,5\\)\\); const spotify = si.siSpotify; console.log\\(Object.keys\\(spotify\\)\\); console.log\\(spotify.slug, spotify.hex\\);\")",
+      "Bash(node -e ':*)"
     ]
   }
 }

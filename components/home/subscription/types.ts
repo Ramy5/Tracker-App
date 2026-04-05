@@ -4,7 +4,7 @@ export type TSubscriptionStatus = "active" | "paused" | "cancelled";
 
 export interface SubscriptionItemProps {
   id: string;
-  icon: ImageSourcePropType;
+  icon?: ImageSourcePropType;
   name: string;
   price: number;
   currency?: string;
@@ -14,6 +14,7 @@ export interface SubscriptionItemProps {
   plan?: string;
   renewalDate?: string;
   onPress: () => void;
+  onDelete: (id: string) => void;
   expanded: boolean;
   paymentMethod?: string;
   startDate?: string;
